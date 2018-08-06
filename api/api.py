@@ -37,12 +37,17 @@ def create_app():
             title = request.args.get('title')
             genre = request.args.get('genre')
             actor = request.args.get('actor')
+            limit = request.args.get('limit', 0)
 
-            results = get_movies({
-                "title": title,
-                "genre": genre,
-                "actor": actor
+            err, results = get_movies({
+                'title': title,
+                'genre': genre,
+                'actor': actor,
+                'limit': limit
             })
+
+            if err:
+                return jsonify({"error": err})
 
             return jsonify({'movies': row_to_dict(results)})
 
@@ -179,7 +184,6 @@ def create_movie(title, genres, actors, rating, seen):
 
     return None, movie_id
 
-
 def get_movies(filter_opts):
     '''
     Retrieve a set of movies based on filters.
@@ -189,17 +193,38 @@ def get_movies(filter_opts):
     genre_name = filter_opts.get('genre')
     actor_name = filter_opts.get('actor')
 
+    try:
+        limit = int(filter_opts.get('limit'))
+    except ValueError:
+        return "Invalid limit.", None
+
+    default_params = []
+    default_query = "SELECT * FROM movies ORDER BY created_at DESC"
+    limit_query = ""
+
+    if limit > 0:
+        limit_query = " LIMIT ?"
+        default_params.append(limit)
+
     # In case of title do a wildcard text search.
     if title:
-        movies = db.execute('''
+        query = '''
             SELECT
                 id,
                 title
             FROM movies
-            WHERE title LIKE ?;
-        ''', ('%{}%'.format(title), )).fetchall()
+            WHERE title LIKE ?
+            ORDER BY created_at DESC
+        '''
 
-        return movies
+        params = ['%{}%'.format(title)]
+
+        movies = db.execute(
+            query + limit_query,
+            params + default_params
+        ).fetchall()
+
+        return None, movies
 
     # In case of genre find all matching movies with this genre applied.
     if genre_name:
@@ -208,18 +233,26 @@ def get_movies(filter_opts):
         ''', (genre_name,)).fetchone()
 
         if not genre:
-            return []
+            return None, []
 
-        movies = db.execute('''
-            SELECT
+        query = '''
+           SELECT
                 m.id,
                 m.title
             FROM movies_genres mg
             JOIN movies m on m.id = mg.movie_id
-            WHERE mg.genre_id = ?;
-        ''', (genre[0], )).fetchall()
+            WHERE mg.genre_id = ?
+            ORDER BY m.created_at DESC
+        '''
 
-        return movies
+        params = [genre[0]]
+
+        movies = db.execute(
+            query + limit_query,
+            params + default_params
+        ).fetchall()
+
+        return None, movies
 
     # In case of actor find all matching movies with this actor.
     if actor_name:
@@ -228,22 +261,33 @@ def get_movies(filter_opts):
         ''', (actor_name, )).fetchone()
 
         if not actor:
-            return []
+            return None, []
 
-        movies = db.execute('''
+        query = '''
             SELECT
                 m.id,
                 m.title
             FROM movies_actors ma
             JOIN movies m on m.id = ma.movie_id
-            WHERE ma.actor_id = ?;
-        ''', (actor[0], ))
+            WHERE ma.actor_id = ?
+            ORDER BY m.created_at DESC
+        '''
 
-        return movies
+        params = [actor[0]]
 
-    all_movies = db.execute("SELECT * FROM movies;").fetchall()
+        movies = db.execute(
+            query + limit_query,
+            params + default_params
+        ).fetchall()
 
-    return all_movies
+        return None, movies
+
+    all_movies = db.execute(
+        default_query + limit_query,
+        default_params
+    ).fetchall()
+
+    return None, all_movies
 
 
 def get_movie(movie_id):
@@ -258,14 +302,15 @@ def get_movie(movie_id):
             seen,
             rating,
             created_at
-        FROM movies WHERE id = ?;
+        FROM movies
+        WHERE id = ?;
     ''', (movie_id,)).fetchone()
 
     if not result:
         return "No movie found.", None
 
     genres = db.execute('''
-        SELECT id, name
+        SELECT g.id, g.name
         FROM
             movies_genres mg
         JOIN
@@ -280,7 +325,7 @@ def get_movie(movie_id):
     ))
 
     actors = db.execute('''
-        SELECT id, name
+        SELECT a.id, a.name
         FROM
             movies_actors ma
         JOIN

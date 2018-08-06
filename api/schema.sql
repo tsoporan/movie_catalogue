@@ -20,6 +20,7 @@ CREATE TABLE genres (
 
 --  M2M
 CREATE TABLE movies_actors (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   actor_id INTEGER,
   movie_id INTEGER,
   FOREIGN KEY(actor_id) REFERENCES actors(id),
@@ -27,6 +28,7 @@ CREATE TABLE movies_actors (
 );
 
 CREATE TABLE movies_genres (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   movie_id INTEGER,
   genre_id INTEGER,
   FOREIGN KEY(movie_id) REFERENCES movies(id),
