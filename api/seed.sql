@@ -24,6 +24,7 @@ INSERT INTO genres(id, name) VALUES (2, 'action');
 INSERT INTO genres(id, name) VALUES (3, 'romance');
 INSERT INTO genres(id, name) VALUES (4, 'thriller');
 INSERT INTO genres(id, name) VALUES (5, 'sci-fi');
+INSERT INTO genres(id, name) VALUES (6, 'mystery');
 
 -- Movies Actors
 INSERT INTO movies_actors(movie_id, actor_id) VALUES (1, 3);
@@ -49,13 +50,13 @@ INSERT INTO movies_genres(movie_id, genre_id) VALUES (2, 1);
 INSERT INTO movies_genres(movie_id, genre_id) VALUES (2, 3);
 INSERT INTO movies_genres(movie_id, genre_id) VALUES (2, 5);
 
-INSERT INTO movies_genres(movie_id, genre_id) VALUES (3, 2);
-INSERT INTO movies_genres(movie_id, genre_id) VALUES (3, 5);
+INSERT INTO movies_genres(movie_id, genre_id) VALUES (3, 4);
+INSERT INTO movies_genres(movie_id, genre_id) VALUES (3, 6);
 
-INSERT INTO movies_genres(movie_id, genre_id) VALUES (4, 5);
 INSERT INTO movies_genres(movie_id, genre_id) VALUES (4, 2);
+INSERT INTO movies_genres(movie_id, genre_id) VALUES (4, 5);
 
-INSERT INTO movies_genres(movie_id, genre_id) VALUES (5, 3);
 INSERT INTO movies_genres(movie_id, genre_id) VALUES (5, 1);
+INSERT INTO movies_genres(movie_id, genre_id) VALUES (5, 3);
 
 INSERT INTO movies_genres(movie_id, genre_id) VALUES (6, 2);
