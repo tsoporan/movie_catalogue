@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { Header, Divider, Form, Button, Message } from "semantic-ui-react";
 
+import moment from "moment";
+
 import { ENDPOINTS, axios } from "../config";
 import { extractError, randomId } from "../helpers";
 
@@ -59,7 +61,7 @@ class AddMovie extends Component {
         addRecentMovie({
           id: randomId(),
           title,
-          created_at: new Date()
+          created_at: moment().unix()
         });
       })
       .catch(err => {

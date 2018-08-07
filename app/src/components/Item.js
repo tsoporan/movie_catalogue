@@ -1,15 +1,12 @@
 import React, { Fragment } from "react";
 import { Card } from "semantic-ui-react";
-import moment from "moment";
 
-import { pickColor } from "../helpers";
+import { pickColor, tsToDate } from "../helpers";
 
 const Item = props => {
   const { item, resourceKind } = props;
   const color = pickColor();
-  const parsedDate = item.created_at
-    ? moment(item.created_at).format("YYYY-MM-DD HH:mm")
-    : null;
+  const parsedDate = tsToDate(item.created_at);
 
   let heading;
 
