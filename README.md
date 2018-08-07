@@ -1,4 +1,4 @@
-# Movie Catalogue
+# MovieCatalogrrr
 
 A simple app to track movie collections.
 
