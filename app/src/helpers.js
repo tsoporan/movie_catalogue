@@ -2,6 +2,8 @@
  * Helpers
  */
 
+import moment from "moment";
+
 /**
  * Given an error response determine the error
  * message or fallback to a default.
@@ -39,4 +41,18 @@ const randomId = (length = 5) => {
   return btoa(Math.random()).substring(0, length);
 };
 
-export { extractError, pickColor, randomId };
+
+/**
+ * Given a timestamp (unix) turns into date
+ * @params {string} timestamp
+ * @returns {string|null}
+ */
+const tsToDate = (timestamp) => {
+  if (timestamp) {
+    return moment.unix(timestamp).utc().format("YYYY-MM-DD HH:MM");
+  }
+
+  return null;
+};
+
+export { extractError, pickColor, randomId, tsToDate };
