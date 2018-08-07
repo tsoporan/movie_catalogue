@@ -4,6 +4,7 @@ Movie Catalogue Flask API
 
 from sqlite3 import IntegrityError, Row
 from flask import Flask, g, request, jsonify
+from flask_cors import CORS
 
 from werkzeug.local import LocalProxy
 
@@ -23,6 +24,7 @@ db = LocalProxy(get_db)
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)  # Default allows on all domains and routes!
 
     @app.route('/', methods=['GET'])
     def index():
@@ -115,7 +117,7 @@ def create_app():
     def actors():
         if request.method == 'GET':
             actors = db.execute('''SELECT * from actors;''').fetchall()
-            return jsonify({'movies': row_to_dict(actors)})
+            return jsonify({'actors': row_to_dict(actors)})
 
         # Creating a new actor
         if request.method == 'POST':
