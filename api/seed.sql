@@ -8,7 +8,6 @@ INSERT into movies(id, title, created_at) VALUES (4, 'The Matrix', 1513516337);
 INSERT into movies(id, title, created_at) VALUES (5, 'Titanic', 1533512222);
 INSERT into movies(id, title, created_at) VALUES (6, 'John Wick', 1532226337);
 
-
 -- Actors
 INSERT INTO actors(id, name) VALUES (1, 'Jim Carrey');
 INSERT INTO actors(id, name) VALUES (2, 'Kate Winslet');
@@ -16,7 +15,7 @@ INSERT INTO actors(id, name) VALUES (3, 'Jake Gyllenhaal');
 INSERT INTO actors(id, name) VALUES (4, 'Guy Pearce');
 INSERT INTO actors(id, name) VALUES (5, 'Keanu Reeves');
 INSERT INTO actors(id, name) VALUES (6, 'Carrie-Anne Moss');
-
+INSERT INTO actors(id, name) VALUES (7, 'Sandra Bullock');
 
 -- Genres
 INSERT INTO genres(id, name) VALUES (1, 'drama');
@@ -25,6 +24,7 @@ INSERT INTO genres(id, name) VALUES (3, 'romance');
 INSERT INTO genres(id, name) VALUES (4, 'thriller');
 INSERT INTO genres(id, name) VALUES (5, 'sci-fi');
 INSERT INTO genres(id, name) VALUES (6, 'mystery');
+INSERT INTO genres(id, name) VALUES (7, 'crime');
 
 -- Movies Actors
 INSERT INTO movies_actors(movie_id, actor_id) VALUES (1, 3);

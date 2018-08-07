@@ -90,7 +90,8 @@ curl localhost:5000/actors
 
 # Adding a movie
 curl -X POST -d "title=Sharknado" http://localhost:5000/movies # Try again and notice error response
-curl -X POST -d "title=John%20Wick%202&genre=action&actor=Keanu%20Reeves" http://localhost:5000/movies # With genre and actor
+curl -X POST -d "title=John%20Wick%202&genres=action&actors=Keanu%20Reeves" http://localhost:5000/movies # With genre and actor
+curl -X POST -d "title=Speed&genres=action,crime&actors=Keanu%20Reeves,Sandra%20Bullock" http://localhost:5000/movies # Multiple
 
 # Use movie ID to query
 curl http://localhost:5000/movies/1 # Your ID
