@@ -37,7 +37,7 @@ sqlite3 movies.db < seed.sql
 
 5. Run
 ```bash
-FLASK_ENV=development # Optional
+export FLASK_ENV=development # Optional
 FLASK_APP=api:create_app flask run
 ```
 
