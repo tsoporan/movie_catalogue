@@ -2,6 +2,8 @@
 
 A simple app to track movie collections.
 
+![Image of MovieCatalogrrr](https://i.imgur.com/ohPLcgs.png)
+
 ---
 
 ### Set up
