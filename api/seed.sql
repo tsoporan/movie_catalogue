@@ -31,11 +31,8 @@ INSERT INTO movies_actors(movie_id, actor_id) VALUES (1, 3);
 INSERT INTO movies_actors(movie_id, actor_id) VALUES (2, 1);
 INSERT INTO movies_actors(movie_id, actor_id) VALUES (2, 2);
 
-INSERT INTO movies_actors(movie_id, actor_id) VALUES (3, 5);
-INSERT INTO movies_actors(movie_id, actor_id) VALUES (3, 6);
-
-INSERT INTO movies_actors(movie_id, actor_id) VALUES (3, 6);
 INSERT INTO movies_actors(movie_id, actor_id) VALUES (3, 4);
+INSERT INTO movies_actors(movie_id, actor_id) VALUES (3, 6);
 
 INSERT INTO movies_actors(movie_id, actor_id) VALUES (4, 5);
 INSERT INTO movies_actors(movie_id, actor_id) VALUES (4, 6);
