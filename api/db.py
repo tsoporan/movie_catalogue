@@ -15,9 +15,7 @@ def get_conn():
     Retrieives a DB connection.
     '''
 
-    return sqlite3.connect(
-        DB_NAME,
-    )
+    return sqlite3.connect(DB_NAME, )
 
 
 def init_db():

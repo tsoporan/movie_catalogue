@@ -11,6 +11,7 @@ from werkzeug.local import LocalProxy
 from db import get_conn
 from helpers import get_current_ts, extract_at_idx, row_to_dict
 
+
 # Manage the DB connection per request
 # Ref: http://flask.pocoo.org/docs/1.0/appcontext/#storing-data
 def get_db():
@@ -20,11 +21,13 @@ def get_db():
 
     return g.db
 
+
 db = LocalProxy(get_db)
+
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)  # Default allows on all domains and routes!
+    CORS(app)  # Default allows on all domains and routes, only for dev!
 
     @app.route('/', methods=['GET'])
     def index():
@@ -33,7 +36,7 @@ def create_app():
     @app.route('/movies', methods=['GET', 'POST'])
     def movies():
 
-        # Filtered movies by params
+        # Filtering movies by params
         if request.method == 'GET':
 
             title = request.args.get('title')
@@ -61,13 +64,7 @@ def create_app():
             rating = request.form.get('rating')
             seen = request.form.get('seen', False)
 
-            err, movie_id = create_movie(
-                title,
-                genres,
-                actors,
-                rating,
-                seen
-            )
+            err, movie_id = create_movie(title, genres, actors, rating, seen)
 
             if err:
                 return jsonify({"error": err}), 400
@@ -163,19 +160,15 @@ def create_movie(title, genres, actors, rating, seen):
     '''
 
     try:
-        movie_id = db.execute('''
+        movie_id = db.execute(
+            '''
             INSERT INTO movies(
                 title,
                 created_at,
                 rating,
                 seen
             ) VALUES (?, ?, ?, ?);
-        ''', (
-            title,
-            get_current_ts(),
-            rating,
-            seen
-        )).lastrowid
+        ''', (title, get_current_ts(), rating, seen)).lastrowid
 
         db.commit()
     except IntegrityError as exc:
@@ -185,6 +178,7 @@ def create_movie(title, genres, actors, rating, seen):
     attach_actors(movie_id, actors)
 
     return None, movie_id
+
 
 def get_movies(filter_opts):
     '''
@@ -221,18 +215,17 @@ def get_movies(filter_opts):
 
         params = ['%{}%'.format(title)]
 
-        movies = db.execute(
-            query + limit_query,
-            params + default_params
-        ).fetchall()
+        movies = db.execute(query + limit_query,
+                            params + default_params).fetchall()
 
         return None, movies
 
     # In case of genre find all matching movies with this genre applied.
     if genre_name:
-        genre = db.execute('''
+        genre = db.execute(
+            '''
             SELECT id FROM genres WHERE name = ?;
-        ''', (genre_name,)).fetchone()
+        ''', (genre_name, )).fetchone()
 
         if not genre:
             return None, []
@@ -249,16 +242,15 @@ def get_movies(filter_opts):
 
         params = [genre[0]]
 
-        movies = db.execute(
-            query + limit_query,
-            params + default_params
-        ).fetchall()
+        movies = db.execute(query + limit_query,
+                            params + default_params).fetchall()
 
         return None, movies
 
     # In case of actor find all matching movies with this actor.
     if actor_name:
-        actor = db.execute('''
+        actor = db.execute(
+            '''
             SELECT id FROM actors WHERE name = ?;
         ''', (actor_name, )).fetchone()
 
@@ -277,17 +269,13 @@ def get_movies(filter_opts):
 
         params = [actor[0]]
 
-        movies = db.execute(
-            query + limit_query,
-            params + default_params
-        ).fetchall()
+        movies = db.execute(query + limit_query,
+                            params + default_params).fetchall()
 
         return None, movies
 
-    all_movies = db.execute(
-        default_query + limit_query,
-        default_params
-    ).fetchall()
+    all_movies = db.execute(default_query + limit_query,
+                            default_params).fetchall()
 
     return None, all_movies
 
@@ -297,7 +285,8 @@ def get_movie(movie_id):
     Retrieve a movie representation
     '''
 
-    result = db.execute('''
+    result = db.execute(
+        '''
         SELECT
             id,
             title,
@@ -306,12 +295,13 @@ def get_movie(movie_id):
             created_at
         FROM movies
         WHERE id = ?;
-    ''', (movie_id,)).fetchone()
+    ''', (movie_id, )).fetchone()
 
     if not result:
         return "No movie found.", None
 
-    genres = db.execute('''
+    genres = db.execute(
+        '''
         SELECT g.id, g.name
         FROM
             movies_genres mg
@@ -326,7 +316,8 @@ def get_movie(movie_id):
         genres
     ))
 
-    actors = db.execute('''
+    actors = db.execute(
+        '''
         SELECT a.id, a.name
         FROM
             movies_actors ma
@@ -360,7 +351,8 @@ def create_actor(name):
     normalized_name = name.strip()
 
     # If the actor already exists we can short circuit
-    actor_id = db.execute('''
+    actor_id = db.execute(
+        '''
         SELECT id FROM actors WHERE name = ?;
     ''', (normalized_name, )).fetchone()
 
@@ -368,7 +360,8 @@ def create_actor(name):
         return None, actor_id[0]
 
     try:
-        actor_id = db.execute('''
+        actor_id = db.execute(
+            '''
             INSERT INTO actors(name) VALUES (?);
         ''', (normalized_name, )).lastrowid
 
@@ -386,15 +379,12 @@ def get_actor(actor_id):
 
     result = db.execute('''
         SELECT * FROM actors WHERE id = ?;
-    ''', (actor_id,)).fetchone()
+    ''', (actor_id, )).fetchone()
 
     if not result:
         return "No actor found.", None
 
-    return None, {
-        "id": result["id"],
-        "name": result["name"]
-    }
+    return None, {"id": result["id"], "name": result["name"]}
 
 
 def create_genre(name):
@@ -405,7 +395,8 @@ def create_genre(name):
     normalized_name = name.lower().strip()
 
     # If the genre already exists we can short circuit
-    genre_id = db.execute('''
+    genre_id = db.execute(
+        '''
         SELECT id FROM genres WHERE name = ?;
     ''', (normalized_name, )).fetchone()
 
@@ -413,7 +404,8 @@ def create_genre(name):
         return None, genre_id[0]
 
     try:
-        genre_id = db.execute('''
+        genre_id = db.execute(
+            '''
             INSERT INTO genres(name) VALUES (?);
         ''', (normalized_name, )).lastrowid
 
@@ -431,15 +423,12 @@ def get_genre(genre_id):
 
     result = db.execute('''
         SELECT * FROM genres WHERE id = ?;
-    ''', (genre_id,)).fetchone()
+    ''', (genre_id, )).fetchone()
 
     if not result:
         return "No genre found.", None
 
-    return None, {
-        "id": result["id"],
-        "name": result["name"]
-    }
+    return None, {"id": result["id"], "name": result["name"]}
 
 
 def attach_genres(movie_id, genres):
@@ -457,23 +446,20 @@ def attach_genres(movie_id, genres):
     val_placeholders = '?' * len(normalized_genres)
 
     query = '''SELECT id FROM genres WHERE name IN ({});'''.format(
-        ','.join(val_placeholders)
-    )
+        ','.join(val_placeholders))
 
     # Extract the ID part
     existing_genres = extract_at_idx(
-        db.execute(query, normalized_genres).fetchall(),
-        idx=0
-    )
+        db.execute(query, normalized_genres).fetchall(), idx=0)
 
     if not existing_genres:
         return
 
-    movie_genre_mapping = [
-        (movie_id, genre_id) for genre_id in existing_genres
-    ]
+    movie_genre_mapping = [(movie_id, genre_id)
+                           for genre_id in existing_genres]
 
-    db.executemany('''
+    db.executemany(
+        '''
         INSERT INTO movies_genres(
             movie_id,
             genre_id
@@ -495,23 +481,20 @@ def attach_actors(movie_id, actors):
     val_placeholders = '?' * len(normalized_actors)
 
     query = '''SELECT id FROM actors WHERE name IN ({});'''.format(
-        ','.join(val_placeholders)
-    )
+        ','.join(val_placeholders))
 
     # Extract the ID part
     existing_actors = extract_at_idx(
-        db.execute(query, normalized_actors).fetchall(),
-        idx=0
-    )
+        db.execute(query, normalized_actors).fetchall(), idx=0)
 
     if not existing_actors:
         return
 
-    movie_actor_mapping = [
-        (movie_id, actor_id) for actor_id in existing_actors
-    ]
+    movie_actor_mapping = [(movie_id, actor_id)
+                           for actor_id in existing_actors]
 
-    db.executemany('''
+    db.executemany(
+        '''
         INSERT INTO movies_actors(
             movie_id,
             actor_id
