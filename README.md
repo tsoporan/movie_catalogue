@@ -12,7 +12,8 @@ SPA written using React.
 #### API
 
 ##### Requirements
-- [Python3](https://www.python.org/)
+
+- [Python3.7](https://www.python.org/)
 - [pipenv](https://docs.pipenv.org/)
 
 1. Install
@@ -41,6 +42,7 @@ FLASK_APP=api:create_app flask run
 #### SPA
 
 ##### Requirements
+
 - [yarn](https://yarnpkg.com/en/)
 
 1. Install
@@ -51,5 +53,5 @@ yarn install
 
 2. Run
 ```
-yarn
+yarn start
 ```
