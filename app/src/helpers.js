@@ -41,15 +41,17 @@ const randomId = (length = 5) => {
   return btoa(Math.random()).substring(0, length);
 };
 
-
 /**
  * Given a timestamp (unix) turns into date
  * @params {string} timestamp
  * @returns {string|null}
  */
-const tsToDate = (timestamp) => {
+const tsToDate = timestamp => {
   if (timestamp) {
-    return moment.unix(timestamp).utc().format("YYYY-MM-DD HH:MM");
+    return moment
+      .unix(timestamp)
+      .utc()
+      .format("YYYY-MM-DD HH:MM");
   }
 
   return null;
