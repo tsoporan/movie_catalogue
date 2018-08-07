@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from "react";
-import { Header, Divider, Loader, Card } from "semantic-ui-react";
+import { Loader, Card } from "semantic-ui-react";
 
 import { ENDPOINTS, axios } from "../config";
 import { extractError } from "../helpers";
