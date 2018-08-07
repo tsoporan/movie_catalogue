@@ -8,14 +8,13 @@
  * @params {object} err
  * @returns {string} Error mesage
  */
-const extractError = (err) => {
-
+const extractError = err => {
   let error = "Could not reach the server.";
 
   if (err.response) {
     error = err.response.data.error;
   } else if (error.request) {
-    error = "No response."
+    error = "No response.";
   }
 
   return error;
@@ -26,7 +25,9 @@ const extractError = (err) => {
  * @params {array} colors
  * @returns {string}
  */
-const pickColor = (colors = ["red", "orange", "purple", "green", "teal", "blue"]) => {
+const pickColor = (
+  colors = ["red", "orange", "purple", "green", "teal", "blue"]
+) => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
@@ -35,11 +36,7 @@ const pickColor = (colors = ["red", "orange", "purple", "green", "teal", "blue"]
  * @returns {string}
  */
 const randomId = (length = 5) => {
-  return btoa(Math.random()).substring(0,length)
+  return btoa(Math.random()).substring(0, length);
 };
 
-export {
-  extractError,
-  pickColor,
-  randomId
-};
+export { extractError, pickColor, randomId };

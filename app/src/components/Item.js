@@ -4,10 +4,12 @@ import moment from "moment";
 
 import { pickColor } from "../helpers";
 
-const Item = (props) => {
+const Item = props => {
   const { item, resourceKind } = props;
   const color = pickColor();
-  const parsedDate = item.created_at ? moment(item.created_at).format("YYYY-MM-DD HH:mm") : null;
+  const parsedDate = item.created_at
+    ? moment(item.created_at).format("YYYY-MM-DD HH:mm")
+    : null;
 
   let heading;
 
@@ -27,7 +29,11 @@ const Item = (props) => {
       <Card color={color}>
         <Card.Content>
           <Card.Header>{heading}</Card.Header>
-          {parsedDate && <Card.Meta><span className="date">Added: {parsedDate}</span></Card.Meta> }
+          {parsedDate && (
+            <Card.Meta>
+              <span className="date">Added: {parsedDate}</span>
+            </Card.Meta>
+          )}
           <Card.Description>ID: #{item.id}</Card.Description>
         </Card.Content>
       </Card>

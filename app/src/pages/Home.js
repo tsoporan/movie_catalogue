@@ -1,10 +1,10 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component } from "react";
 import { Header, Divider } from "semantic-ui-react";
 
 import AddMovie from "../components/AddMovie";
 import ItemList from "../components/ItemList";
 
-class Home extends Component{
+class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -29,10 +29,14 @@ class Home extends Component{
         <Header>Recently Added</Header>
         <Divider />
 
-        <ItemList resourceKind={"movies"} limit={3} defaultItems={recentMovies} />
+        <ItemList
+          resourceKind={"movies"}
+          limit={3}
+          defaultItems={recentMovies}
+        />
       </Fragment>
     );
   }
-};
+}
 
 export default Home;

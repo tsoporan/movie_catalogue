@@ -1,8 +1,8 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component } from "react";
 import { Header, Divider, Loader, Card } from "semantic-ui-react";
 
 import { ENDPOINTS, axios } from "../config";
-import { extractError } from"../helpers";
+import { extractError } from "../helpers";
 
 import Item from "./Item";
 
@@ -14,17 +14,17 @@ class ItemList extends Component {
       isLoading: false,
       error: null,
       items: []
-    }
+    };
   }
 
   componentDidMount() {
-    const { resourceKind, limit = null }  = this.props;
+    const { resourceKind, limit = null } = this.props;
 
     const params = new URLSearchParams();
     const endpoint = ENDPOINTS[resourceKind];
 
     if (limit) {
-      params.append('limit', limit);
+      params.append("limit", limit);
     }
 
     this.setState({
@@ -32,12 +32,10 @@ class ItemList extends Component {
     });
 
     // Request resource
-    axios.get(
-      endpoint,
-      {
+    axios
+      .get(endpoint, {
         params
-      }
-    )
+      })
       .then(resp => {
         const items = resp.data[resourceKind];
 
@@ -45,7 +43,6 @@ class ItemList extends Component {
           items,
           isLoading: false
         });
-
       })
       .catch(err => {
         const error = extractError(err);
@@ -53,7 +50,6 @@ class ItemList extends Component {
         this.setState({
           error
         });
-
       });
   }
 
@@ -90,7 +86,9 @@ class ItemList extends Component {
         <Fragment>
           {items && items.length > 0 ? (
             <Card.Group centered>
-              {items.map(item=> <Item key={item.id} item={item} resourceKind={resourceKind} />)}
+              {items.map(item => (
+                <Item key={item.id} item={item} resourceKind={resourceKind} />
+              ))}
             </Card.Group>
           ) : (
             <p> No {resourceKind}, please add them first.</p>
@@ -99,6 +97,6 @@ class ItemList extends Component {
       );
     }
   }
-};
+}
 
 export default ItemList;
