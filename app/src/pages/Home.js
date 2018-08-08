@@ -14,9 +14,9 @@ class Home extends Component {
   }
 
   addRecentMovie(movie) {
-    this.setState({
-      recentMovies: [movie, ...this.state.recentMovies]
-    });
+    this.setState((prevState) => ({
+      recentMovies: [movie, ...prevState.recentMovies]
+    }));
   }
 
   render() {
