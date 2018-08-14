@@ -1,5 +1,7 @@
 # MovieCatalogrrr
 
+**NOTE: This is a quick and dirty example project using a RESTful API and React!**
+
 A simple app to track movie collections.
 
 ![Image of MovieCatalogrrr](https://i.imgur.com/ohPLcgs.png)
